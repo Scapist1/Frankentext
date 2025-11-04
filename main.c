@@ -31,9 +31,8 @@ size_t succs_sizes[MAX_WORD_COUNT];
 /// Overwrites non-printable characters in `book` with a space.
 /// Non-printable characters may lead to duplicates like
 /// `"\xefthe" and "the"` even both print `the`.
-void replace_non_printable_chars_with_space() {
-  // YOUR CODE HERE
-  for (size_t i = 0; book[i] != '\0'; ++i) {
+void replace_non_printable_chars_with_space() { /* The function isprint() expects an int value that represents either EOF or a character value converted from an unsigned char. */
+  for (size_t i = 0; book[i] != '\0'; ++i) { 
     if (!isprint((unsigned char)book[i])) {
       book[i] = ' ';
     }
@@ -47,14 +46,14 @@ void replace_non_printable_chars_with_space() {
 ///
 /// \param token token to look up (or insert)
 /// \return Index of `token` in \c tokens array
-size_t token_id(char *token) {
+size_t token_id(char *token) { /* looks for a given string (token) inside an array called tokens */
   size_t id;
   for (id = 0; id < tokens_size; ++id) {
-    if (strcmp(tokens[id], token) == 0) {
+    if (strcmp(tokens[id], token) == 0) { /* Match == 0, return id. Else keep looping and add new token */
       return id;
     }
   }
-  tokens[id] = token;
+  tokens[id] = token; /* token */
   ++tokens_size;
   return id;
 }
@@ -74,13 +73,13 @@ void append_to_succs(char *token, char *succ) {
 /// Creates tokens on \c book and fills \c tokens and \c succs using
 /// the functions \c token_id and \c append_to_succs.
 void tokenize_and_fill_succs(char *delimiters, char *str) {
-  char *prev = NULL;
+  char *prevToken = NULL;
   char *token = strtok(str, delimiters);
-  while (token != NULL) {
-    if (prev != NULL)
-      append_to_succs(prev, token);
+  while (token != NULL) { /* This loop runs once for every token found by strtok() */
+    if (prevToken != NULL)
+      append_to_succs(prevToken, token);
     token_id(token);
-    prev = token;
+    prevToken = token;
     token = strtok(NULL, delimiters);
   }
 }
@@ -101,7 +100,6 @@ bool token_ends_a_sentence(char *token) {
 /// capital letter.
 /// Uses \c tokens and \c tokens_size.
 size_t random_token_id_that_starts_a_sentence() {
-  // YOUR CODE HERE
   size_t id;
   do {
     id = rand() % tokens_size;
@@ -136,7 +134,6 @@ char *generate_sentence(char *sentence, size_t sentence_size) {
   // Concatenates random successors to the sentence as long as
   // `sentence` can hold them.
   do {
-    // YOUR CODE HERE
     size_t succ_count = succs_sizes[current_token_id];
     if (succ_count == 0)
       break;
@@ -154,7 +151,7 @@ char *generate_sentence(char *sentence, size_t sentence_size) {
 }
 
 int main() {
-  replace_non_printable_chars_with_space();
+  replace_non_printable_chars_with_space(); // replaces all "/\#" like characters with space
 
   char *delimiters = " \n\r";
   tokenize_and_fill_succs(delimiters, book);
@@ -176,3 +173,4 @@ int main() {
   } while (last_char(sentence) != '!');
   puts(sentence);
 }
+
